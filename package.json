@@ -1,0 +1,35 @@
+{
+    "name": "mrpack.ts",
+    "version": "1.0.0",
+    "description": "A TypeScript library for handling mrpack files (ESM Only)",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "tsc",
+        "test": "jest",
+        "dev": "tsc --watch"
+    },
+    "keywords": [
+        "typescript",
+        "mrpack",
+        "minecraft"
+    ],
+    "author": "MoYuan-CN",
+    "license": "AGPL-3.0-only",
+    "dependencies": {
+        "jszip": "^3.10.1"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.14",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.4.4",
+        "typescript": "^5.9.2"
+    }
+}
