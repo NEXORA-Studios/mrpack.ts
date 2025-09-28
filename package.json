@@ -1,5 +1,5 @@
 {
-    "name": "mrpack.ts",
+    "name": "@nexora-studios/mrpack.ts",
     "version": "1.0.0",
     "description": "A TypeScript library for handling mrpack files (ESM Only)",
     "type": "module",
