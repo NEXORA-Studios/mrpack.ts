@@ -2,7 +2,7 @@ name: Release
 
 on:
     release:
-        types: [published] # 只在你点 GitHub Release 的 "Publish release" 时触发
+        types: [published] # Trigger only when "Publish release" is clicked in GitHub Releases
 
 jobs:
     release:
@@ -11,6 +11,9 @@ jobs:
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
+              with:
+                  ref: main # Explicitly checkout the main branch
+                  fetch-depth: 0 # Fetch full history to allow proper git operations
 
             - name: Setup pnpm
               uses: pnpm/action-setup@v4
@@ -29,18 +32,21 @@ jobs:
             - name: Build package
               run: pnpm build
 
-            # 自动生成 changelog 并更新 package.json 版本
+            # Automatically generate changelog and update package.json version
             - name: Push changelog back to main
               run: |
                   git config user.name "github-actions[bot]"
                   git config user.email "github-actions[bot]@users.noreply.github.com"
-                  git fetch origin main
-                  git checkout main
-                  git pull origin main
-                  cp CHANGELOG.md CHANGELOG.md
+                  git pull origin main --rebase # Ensure the branch is up-to-date
+                  cp CHANGELOG.md CHANGELOG.md # Note: This line seems unnecessary; verify if needed
                   git add CHANGELOG.md package.json
-                  git commit -m "chore(release): update changelog [skip ci]" || echo "No changes to commit"
+                  git commit -m "docs(release): update changelog [skip ci]" || echo "No changes to commit"
                   git push origin main
+              env:
+                  GIT_AUTHOR_NAME: github-actions[bot]
+                  GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com
+                  GIT_COMMITTER_NAME: github-actions[bot]
+                  GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
 
             - name: Publish to npm
               run: pnpm publish --access public --no-git-checks
