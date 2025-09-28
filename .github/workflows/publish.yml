@@ -30,14 +30,17 @@ jobs:
               run: pnpm build
 
             # 自动生成 changelog 并更新 package.json 版本
-            - name: Create changelog & bump version
+            - name: Push changelog back to main
               run: |
-                  pnpm dlx conventional-changelog-cli -p angular -i CHANGELOG.md -s
                   git config user.name "github-actions[bot]"
                   git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git fetch origin main
+                  git checkout main
+                  git pull origin main
+                  cp CHANGELOG.md CHANGELOG.md
                   git add CHANGELOG.md package.json
                   git commit -m "chore(release): update changelog [skip ci]" || echo "No changes to commit"
-                  git push origin HEAD:${GITHUB_REF#refs/heads/}
+                  git push origin main
 
             - name: Publish to npm
               run: pnpm publish --access public --no-git-checks
