@@ -1,0 +1,44 @@
+name: Commit-based Publish
+
+on:
+    push:
+        branches:
+            - main # 只在 main 分支推送时发布
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  registry-url: "https://registry.npmjs.org"
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Build package
+              run: pnpm build
+
+            - name: Bump version with commit hash
+              run: |
+                  BASE_VERSION=$(node -p "require('./package.json').version")
+                  COMMIT_SHORT=$(git rev-parse --short HEAD)
+                  NEW_VERSION="${BASE_VERSION}-${COMMIT_SHORT}"
+                  echo "Publishing version: $NEW_VERSION"
+                  pnpm version --no-git-tag-version $NEW_VERSION
+
+            - name: Publish to npm
+              run: pnpm publish --access public --no-git-checks
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
