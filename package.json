@@ -7,7 +7,7 @@
     "types": "dist/index.d.ts",
     "repository": {
         "type": "git",
-        "url": "https://github.com/NEXORA-Studios/npm.js/mrpack.ts.git"
+        "url": "https://github.com/NEXORA-Studios/mrpack.ts.git"
     },
     "exports": {
         ".": {
