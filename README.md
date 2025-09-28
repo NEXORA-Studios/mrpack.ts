@@ -1,4 +1,4 @@
-# mrpack.ts
+# @nexora-studios/mrpack.ts
 
 A TypeScript library for handling mrpack files (Modrinth mod packs) with ESM support.
 
@@ -18,60 +18,28 @@ A TypeScript library for handling mrpack files (Modrinth mod packs) with ESM sup
 
 ```bash
 # Using npm
-npm install mrpack.ts
+npm install @nexora-studios/mrpack.ts
 
 # Using pnpm
-pnpm add mrpack.ts
+pnpm add @nexora-studios/mrpack.ts
 
 # Using yarn
-yarn add mrpack.ts
+yarn add @nexora-studios/mrpack.ts
 ```
 
 ## Dependencies
 
 - [jszip](https://www.npmjs.com/package/jszip) - For creating ZIP files
-- [@iarna/toml](https://www.npmjs.com/package/@iarna/toml) - For handling TOML files (peer dependency)
+- [@iarna/toml](https://www.npmjs.com/package/@iarna/toml) - For handling TOML files (peer dependency, optional)
 
-## Scripts
-
-```bash
-# Build the project
-pnpm run build
-
-# Run tests
-pnpm test
-
-# Watch mode for development
-pnpm run dev
-```
-
-## Project Structure
-
-```
-├── src/
-│   ├── components/      # Reusable components
-│   │   ├── IndexJson.ts     # Mod pack metadata handling
-│   │   ├── IndexJsonFile.ts # File entry in mod pack index
-│   │   ├── Override.ts      # Override file handling
-│   │   └── index.ts         # Component exports
-│   ├── lib/             # Core library functionality
-│   │   └── mrpack/          # mrpack-specific code
-│   ├── types/           # Type definitions
-│   └── index.ts         # Main entry point
-├── dist/                # Compiled output
-├── package.json         # Project configuration
-├── tsconfig.json        # TypeScript configuration
-├── jest.config.js       # Jest configuration
-├── .npmrc               # pnpm configuration
-└── .gitignore           # Files to ignore in Git
-```
+---
 
 ## Usage
 
 ### Basic Example
 
 ```typescript
-import { MrpackBuilder, IndexJson, IndexJsonFile, Override } from 'mrpack.ts';
+import { MrpackBuilder, IndexJson, IndexJsonFile, Override } from '@nexora-studios/mrpack.ts';
 
 // Create index metadata
 const indexJson = new IndexJson(
@@ -142,13 +110,56 @@ builder.addOverride(override);
 const buffer = await builder.build();
 ```
 
+---
+
+# Development Guide
+
+## Scripts
+
+```bash
+# Build the project
+pnpm run build
+
+# Run tests
+pnpm test
+
+# Watch mode for development
+pnpm run dev
+```
+
+## Project Structure
+
+```
+├── src/
+│   ├── components/      # Reusable components
+│   │   ├── IndexJson.ts     # Mod pack metadata handling
+│   │   ├── IndexJsonFile.ts # File entry in mod pack index
+│   │   ├── Override.ts      # Override file handling
+│   │   └── index.ts         # Component exports
+│   ├── lib/             # Core library functionality
+│   │   ├── managers/        # Component managers
+│   │   ├── package/         # Package system
+│   │   └── mrpack/          # mrpack-specific code
+│   ├── types/           # Type definitions
+│   └── index.ts         # Main entry point
+├── tests/               # Test files
+├── dist/                # Compiled output
+├── package.json         # Project configuration
+├── tsconfig.json        # TypeScript configuration
+├── jest.config.js       # Jest configuration
+├── .npmrc               # pnpm configuration
+└── .gitignore           # Files to ignore in Git
+```
+
+---
+
 ## TypeScript Support
 
 This library is written in TypeScript and includes type definitions.
 
 ## License
 
-AGPL-3.0-only
+Apache-2.0
 
 ## Author
 
