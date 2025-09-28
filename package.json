@@ -11,6 +11,12 @@
             "import": "./dist/index.js"
         }
     },
+    "files": [
+        "dist/**/*",
+        "package.json",
+        "README.md",
+        "LICENSE"
+    ],
     "scripts": {
         "build": "tsc",
         "test": "jest",
