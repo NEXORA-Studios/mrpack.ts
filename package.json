@@ -14,7 +14,8 @@
     "scripts": {
         "build": "tsc",
         "test": "jest",
-        "dev": "tsc --watch"
+        "dev": "tsc --watch",
+        "lint": "eslint . --ext .ts,.tsx --fix"
     },
     "keywords": [
         "typescript",
@@ -22,14 +23,25 @@
         "minecraft"
     ],
     "author": "MoYuan-CN",
-    "license": "AGPL-3.0-only",
+    "license": "Apache-2.0",
     "dependencies": {
         "jszip": "^3.10.1"
     },
     "devDependencies": {
+        "@eslint/eslintrc": "3.3.1",
+        "@eslint/js": "9.36.0",
         "@types/jest": "^29.5.14",
+        "@typescript-eslint/eslint-plugin": "8.44.1",
+        "@typescript-eslint/parser": "8.44.1",
+        "eslint": "9.36.0",
+        "eslint-config-prettier": "10.1.8",
+        "globals": "16.4.0",
         "jest": "^29.7.0",
         "ts-jest": "^29.4.4",
+        "ts-node": "10.9.2",
         "typescript": "^5.9.2"
+    },
+    "peerDependencies": {
+        "@iarna/toml": "^2.2.5"
     }
 }

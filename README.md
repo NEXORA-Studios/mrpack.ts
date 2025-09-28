@@ -1,18 +1,36 @@
 # mrpack.ts
 
-A TypeScript library for handling mrpack files, built with TypeScript, JSZip, and Jest for testing.
+A TypeScript library for handling mrpack files (Modrinth mod packs) with ESM support.
+
+## Features
+
+- Create mrpack files programmatically
+- Manage mod pack metadata (name, version, summary, dependencies)
+- Add files and overrides to mod packs
+- Support for JSON, TOML, string, and buffer content types
 
 ## Prerequisites
 
 - Node.js (>=16.x)
-- [pnpm](https://pnpm.io/) (>=8.0.0)
+- [pnpm](https://pnpm.io/) (>=8.0.0) or other package managers
 
 ## Installation
 
 ```bash
-# Install dependencies
-pnpm install
+# Using npm
+npm install mrpack.ts
+
+# Using pnpm
+pnpm add mrpack.ts
+
+# Using yarn
+yarn add mrpack.ts
 ```
+
+## Dependencies
+
+- [jszip](https://www.npmjs.com/package/jszip) - For creating ZIP files
+- [@iarna/toml](https://www.npmjs.com/package/@iarna/toml) - For handling TOML files (peer dependency)
 
 ## Scripts
 
@@ -31,9 +49,15 @@ pnpm run dev
 
 ```
 ├── src/
-│   ├── index.ts         # Main entry point
-│   └── __tests__/       # Test files
-│       └── index.test.ts # Tests for the main module
+│   ├── components/      # Reusable components
+│   │   ├── IndexJson.ts     # Mod pack metadata handling
+│   │   ├── IndexJsonFile.ts # File entry in mod pack index
+│   │   ├── Override.ts      # Override file handling
+│   │   └── index.ts         # Component exports
+│   ├── lib/             # Core library functionality
+│   │   └── mrpack/          # mrpack-specific code
+│   ├── types/           # Type definitions
+│   └── index.ts         # Main entry point
 ├── dist/                # Compiled output
 ├── package.json         # Project configuration
 ├── tsconfig.json        # TypeScript configuration
@@ -44,27 +68,88 @@ pnpm run dev
 
 ## Usage
 
+### Basic Example
+
 ```typescript
-import MrPackHandler from 'mrpack.ts';
+import { MrpackBuilder, IndexJson, IndexJsonFile, Override } from 'mrpack.ts';
 
-// Create a new instance
-const handler = new MrPackHandler();
+// Create index metadata
+const indexJson = new IndexJson(
+  'My Mod Pack',
+  '1.0.0',
+  { minecraft: '1.19.2', 'fabric-loader': '0.14.9' },
+  'A cool mod pack'
+);
 
-// Create a new mrpack file
-const packData = await handler.createPack('My Pack', '1.0.0');
+// Add a file to the index
+const modFile = new IndexJsonFile(
+  'mods/modid-1.0.0.jar',
+  'sha1hash',
+  'sha512hash',
+  123456 // file size in bytes
+);
+modFile.addDownloadUri('https://example.com/mods/modid-1.0.0.jar');
+indexJson.addFile(modFile);
 
-// Read an existing mrpack file
-const packInfo = await handler.readPack(packData);
-console.log(packInfo.name); // 'My Pack'
-console.log(packInfo.version); // '1.0.0'
-console.log(packInfo.files); // List of files in the pack
+// Create a builder with the index
+const builder = new MrpackBuilder(indexJson.marshaledJson);
+
+// Add an override file
+const configOverride = new Override('config/config.json', 'json');
+configOverride.content = { setting1: 'value1', setting2: 'value2' };
+builder.addOverride(configOverride);
+
+// Build the mrpack file
+const mrpackBuffer = await builder.build();
+
+// Now you can write mrpackBuffer to a file
 ```
 
-## Why pnpm?
+### Components
 
-This project uses pnpm as the package manager because:
-- It's faster than npm and Yarn
-- It saves disk space with its unique symlinking strategy
-- It has better handling of peer dependencies
+#### IndexJson
+Used to create and manage the mod pack metadata.
 
-To learn more about pnpm, visit [pnpm.io](https://pnpm.io/).
+```typescript
+const indexJson = new IndexJson(name, version, dependencies, summary?);
+indexJson.addFile(file);
+const marshaled = indexJson.marshaledJson;
+```
+
+#### IndexJsonFile
+Represents a file in the mod pack index.
+
+```typescript
+const file = new IndexJsonFile(path, sha1, sha512, fileSize);
+file.addDownloadUri(uri);
+const marshaled = file.marshaledJson;
+```
+
+#### Override
+Represents a file to be included directly in the mod pack.
+
+```typescript
+const override = new Override(filePath, fileType); // fileType can be 'json', 'toml', 'string', or 'buffer'
+override.content = content;
+```
+
+#### MrpackBuilder
+Builds the final mrpack file.
+
+```typescript
+const builder = new MrpackBuilder(indexJson);
+builder.addOverride(override);
+const buffer = await builder.build();
+```
+
+## TypeScript Support
+
+This library is written in TypeScript and includes type definitions.
+
+## License
+
+AGPL-3.0-only
+
+## Author
+
+MoYuan-CN
