@@ -39,6 +39,7 @@ jobs:
                   git config user.name "github-actions[bot]"
                   git config user.email "github-actions[bot]@users.noreply.github.com"
                   npx standard-version --release-as ${{ github.event.release.tag_name }} --no-verify
+                  git push --follow-tags origin main
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
