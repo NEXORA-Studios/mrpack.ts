@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/NEXORA-Studios/mrpack.ts/compare/v1.0.1...v1.0.2) (2025-09-28)
+
+
+### Bug Fixes
+
+* 修复错误的仓库地址 ([16f15f2](https://github.com/NEXORA-Studios/mrpack.ts/commit/16f15f25d82f10efbbc603de24685bc27edda94a))
+
 ### [1.0.1](https://github.com/NEXORA-Studios/npm.js/mrpack.ts/compare/v1.0.0...v1.0.1) (2025-09-28)
 
 ## 1.0.0 (2025-09-28)
