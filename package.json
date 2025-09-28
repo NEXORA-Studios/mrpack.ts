@@ -5,6 +5,10 @@
     "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NEXORA-Studios/npm.js/mrpack.ts.git"
+    },
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
@@ -26,7 +30,8 @@
     "keywords": [
         "typescript",
         "mrpack",
-        "minecraft"
+        "minecraft",
+        "modrinth"
     ],
     "author": "MoYuan-CN",
     "license": "Apache-2.0",

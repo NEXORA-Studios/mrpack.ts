@@ -1,0 +1,48 @@
+name: Publish Stable (Release)
+
+on:
+    release:
+        types: [published] # Trigger only when "Publish release" is clicked in GitHub Releases
+
+jobs:
+    release:
+        if: ${{ github.event.release.prerelease == false }}
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+              with:
+                  ref: main # Explicitly checkout the main branch
+                  fetch-depth: 0 # Fetch full history to allow proper git operations
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  registry-url: "https://registry.npmjs.org"
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Build package
+              run: pnpm build
+
+            # Generate changelog and update package.json version
+            - name: Generate changelog
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  npx standard-version --release-as ${{ github.event.release.tag_name }} --no-verify
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Publish to npm
+              run: pnpm publish --access public --no-git-checks
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,4 +1,4 @@
-name: Commit-based Publish
+name: Commit-based Publish (Dev)
 
 on:
     push:
@@ -39,6 +39,6 @@ jobs:
                   pnpm version --no-git-tag-version $NEW_VERSION
 
             - name: Publish to npm
-              run: pnpm publish --access public --no-git-checks
+              run: pnpm publish --access public --no-git-checks --tag dev
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
